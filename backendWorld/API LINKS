@@ -1,0 +1,45 @@
+https://api.worldbank.org/v2/country/TV/indicator/SP.POP.TOTL?format=json
+
+POPULATION FROM 1974 TO 2024
+-----------------------------------------------------------------------
+https://api.worldbank.org/v2/country/cn?format=json
+
+[
+  {
+    "page": 1,
+    "pages": 1,
+    "per_page": "50",
+    "total": 1
+  },
+  [
+    {
+      "id": "TUV",
+      "iso2Code": "TV",
+      "name": "Tuvalu",
+      "region": {
+        "id": "EAS",
+        "iso2code": "Z4",
+        "value": "East Asia & Pacific"
+      },
+      "adminregion": {
+        "id": "EAP",
+        "iso2code": "4E",
+        "value": "East Asia & Pacific (excluding high income)"
+      },
+      "incomeLevel": {
+        "id": "UMC",
+        "iso2code": "XT",
+        "value": "Upper middle income"
+      },
+      "lendingType": {
+        "id": "IDX",
+        "iso2code": "XI",
+        "value": "IDA"
+      },
+      "capitalCity": "Funafuti",
+      "longitude": "179.089567",
+      "latitude": "-8.6314877"
+    }
+  ]
+]
+----------------------------------------------------------------------

@@ -1,46 +1,65 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import axios from 'axios';
 import WorldMap from 'react-svg-worldmap';
 import { useState } from 'react';
 
 function Worldmap() {
-  const [state, setState] = useState({ iso: 'gg' });
-  const [data, setData] = useState([
-    { country: 'cn', value: 10 },
-    { country: 'in', value: 9 },
-    { country: 'us', value: 8 },
-    { country: 'id', value: 7 },
-    { country: 'pk', value: 6 },
-    { country: 'br', value: 5 },
-    { country: 'ng', value: 4 },
-    { country: 'bd', value: 3 },
-    { country: 'ru', value: 2 },
-    { country: 'jp', value: 1 },
-    { country: 'mg', value: 11}]);
+  const [CountryData, setCountry] = useState({});
+  const [code, setCode] = useState('in');
+  const [data, setData] = useState([{ country: 'in', value: 9 }]);
 
- 
-  const clickAction = useCallback(({ countryCode }) => {
-    setState({
-      iso: countryCode,
-    });
-    const add = {'country':countryCode,'value':3}
-    setData((prev)=>[...prev,add])
-    
-  }, []);
+  useEffect(() => {
+    const fetchdata = async () => {
+      const Response = await axios.get(
+        `https://api.worldbank.org/v2/country/${code}/indicator/SP.POP.TOTL?format=json`
+      );
+      const CountryData = (await Response.data[1]) || [];
+      const dataObject = {
+        name: CountryData[0].country.value,
+        populationYears: CountryData.map((data) => {
+          return {
+            year: data.date,
+            population: data.value,
+          };
+        }),
+      };
+      setCountry(dataObject);
+      console.log(dataObject);
+    };
+    fetchdata();
+  }, [code]);
+  const clickAction = ({ countryCode }) => {
+    setCode(countryCode);
+  };
+  console.log(CountryData.name);
   return (
     <div>
       <WorldMap
         color="purple"
         title="Top 10 Populous Countries"
         value-suffix="people"
-        size="xxl"
+        size="md"
+        backgroundColor="lightblue"
         data={data}
         onClickFunction={clickAction}
       />
-       <div>
-       
-        ISO :{state.iso}
-        
-      </div>
+      {CountryData ? (
+        <div>
+          <p>{CountryData.name}</p>
+          {CountryData.populationYears?.length > 0 ? (
+            CountryData.populationYears.map((populationData) => (
+              <p key={populationData.year}>
+                Year: {populationData.year} - Population:{' '}
+                {populationData.population}
+              </p>
+            ))
+          ) : (
+            <p>No population data available.</p>
+          )}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
